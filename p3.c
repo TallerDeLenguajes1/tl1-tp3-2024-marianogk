@@ -4,6 +4,7 @@
 
 void cargarNombres(char **nombres);
 void mostrarNombres(char **nombres);
+void liberarMemoria(char **nombres);
 
 int main()
 {
@@ -13,6 +14,8 @@ int main()
 
     cargarNombres(nombres);
     mostrarNombres(nombres);
+    liberarMemoria(nombres);
+
 
     return 0;
 }
@@ -40,4 +43,13 @@ void mostrarNombres(char **nombres)
         printf("\nNombre %d: ", i + 1);
         puts(nombres[i]);
     }
+}
+
+void liberarMemoria(char **nombres)
+{
+    for (int i = 0; i < 5; i++)
+    {
+        free(nombres[i]); // Libero la memoria para cada nombre
+    }
+    free(nombres); // Libero la memoria asignada para el arreglo de nombres
 }
