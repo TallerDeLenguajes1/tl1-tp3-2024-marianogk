@@ -2,32 +2,36 @@
 #include <stdlib.h>
 #include <string.h>
 
-void cargarNombres(char **nombres);
-void mostrarNombres(char **nombres);
-void liberarMemoria(char **nombres);
+void cargarNombres(char **nombres, int cant);
+void mostrarNombres(char **nombres, int cant);
+void liberarMemoria(char **nombres, int cant);
 
 int main()
 {
     char *buff, **nombres;
+    int cant;
 
-    nombres = (char **)malloc(5 * sizeof(char *)); // Asigno memoria a la lista de 5 nombres
+    printf("\nIngrese la cantidad de nombres: ");
+    scanf("%d", &cant);
 
-    cargarNombres(nombres);
-    mostrarNombres(nombres);
-    liberarMemoria(nombres);
+    nombres = (char **)malloc(cant * sizeof(char *)); // Asigno memoria a la lista de nombres
 
+    cargarNombres(nombres, cant);
+    mostrarNombres(nombres, cant);
+    liberarMemoria(nombres, cant);
 
     return 0;
 }
 
-void cargarNombres(char **nombres)
+void cargarNombres(char **nombres, int cant)
 {
     char *buff;
 
     buff = (char *)malloc(100 * sizeof(char)); // Asigno memoria dinamica al buffer para 100 caracteres
 
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < cant; i++)
     {
+        fflush(stdin);
         puts("Ingrese un nombre: ");
         gets(buff);
 
@@ -36,18 +40,18 @@ void cargarNombres(char **nombres)
     }
 }
 
-void mostrarNombres(char **nombres)
+void mostrarNombres(char **nombres, int cant)
 {
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < cant; i++)
     {
         printf("\nNombre %d: ", i + 1);
         puts(nombres[i]);
     }
 }
 
-void liberarMemoria(char **nombres)
+void liberarMemoria(char **nombres, int cant)
 {
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < cant; i++)
     {
         free(nombres[i]); // Libero la memoria para cada nombre
     }
