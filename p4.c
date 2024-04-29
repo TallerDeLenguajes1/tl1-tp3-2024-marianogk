@@ -21,8 +21,8 @@ typedef struct Cliente
 
 void cargarClientes(Cliente **c, int cantC);
 void cargarProductos(Producto **p, int *cantP);
-void mostrarClientes(Cliente **c);
-void mostrarProductos(Producto **p);
+void mostrar(Cliente **c, int cantC);
+float totalProducto(Producto p);
 
 int main()
 {
@@ -35,6 +35,8 @@ int main()
     c = (Cliente **)malloc(cantC * sizeof(Cliente *));
 
     cargarClientes(c, cantC);
+
+    mostrar(c, cantC);
 
     return 0;
 }
@@ -67,35 +69,60 @@ void cargarClientes(Cliente **c, int cantC)
         cantP = c[i]->CantidadProductosAPedir;
 
         cargarProductos(&(c[i]->Productos), &cantP);
-        
-        free(buff);
     }
-
-    
+    free(buff);
 }
 
-void cargarProductos(Producto **p, int *cantP) 
+void cargarProductos(Producto **p, int *cantP)
 {
     char *TiposProductos[] = {"Galletas", "Snack", "Cigarrillos", "Caramelos", "Bebidas"};
-    int k=0;
+    int k = 0;
 
     *p = (Producto *)malloc(*cantP * sizeof(Producto));
 
     for (int j = 0; j < *cantP; j++)
     {
-        (*p+j)->ProductoID = j; 
-        (*p+j)->Cantidad = 1 + rand() % 10;
+        (*p + j)->ProductoID = j;
+        (*p + j)->Cantidad = 1 + rand() % 10;
 
         k = rand() % 5; // genero un indice aleatorio para el tipo
-        (*p+j)->TipoProducto = (char *)malloc(strlen(TiposProductos[k]) + 1);
+        (*p + j)->TipoProducto = (char *)malloc(strlen(TiposProductos[k]) + 1);
 
-        strcpy((*p+j)->TipoProducto, TiposProductos[k]);
+        strcpy((*p + j)->TipoProducto, TiposProductos[k]);
 
-        (*p+j)
-        ->PrecioUnitario = 10 + rand() % 91;
+        (*p + j)->PrecioUnitario = (10 + rand() % 90001)/1000.0f;
     }
 }
 
-void mostrarClientes(Cliente **c)
+void mostrar(Cliente **c, int cantC)
 {
+    float total;
+    for (int i = 0; i < cantC; i++)
+    {
+        total=0;
+        printf("\n-CLIENTE ID %d-\n", c[i]->ClienteID);
+        printf("Nombre: ");
+        puts(c[i]->NombreCliente);
+        printf("\nCantidad de productos: %d\n", c[i]->CantidadProductosAPedir);
+
+        puts("\n-PRODUCTOS-");
+        for (int j = 0; j < c[i]->CantidadProductosAPedir; j++)
+        {
+            printf("\nProducto ID %d\n", c[i]->Productos[j].ProductoID);
+            printf("\nCantidad: %d\n", c[i]->Productos[j].Cantidad);
+            printf("Tipo: ");
+            puts(c[i]->Productos[j].TipoProducto);
+            printf("Precio unitario: %.2f\n", c[i]->Productos[j].PrecioUnitario);
+            printf("Total producto: %.2f\n", totalProducto(c[i]->Productos[j]));
+            total+=totalProducto(c[i]->Productos[j]);
+        }
+        printf("\nTOTAL A PAGAR: %.2f\n", total);
+    }
+}
+
+float totalProducto(Producto p)
+{
+    float total;
+    total = p.Cantidad * p.PrecioUnitario;
+    return total;
 }
